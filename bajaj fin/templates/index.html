@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RA2111003011703</title> 
+    <style>
+  
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+    
+        header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        /* Style for the container */
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #response {
+            margin-top: 20px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+    
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #4CAF50;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>SRM University of science and technology</h1>
+        <h3>Roll No: RA2111003011703</h3> 
+    </header>
+
+    <div class="container">
+        <h2>Enter Your JSON Text Only</h2>
+
+        <label for="dataInput">Enter JSON Data:</label>
+        <textarea id="dataInput" rows="8">{
+  "data": ["M", "1", "334", "4", "B", "Z", "a"],
+  "file_b64": "BASE_64_STRING"
+}</textarea>
+
+        <button onclick="submitData()">Submit</button>
+        <p id="error" class="error"></p>
+
+        <h2>Select What You Want from the Given Options</h2>
+        <select id="responseOptions">
+            <option value="">-- Select an option --</option>
+            <option value="alphabets">Alphabets</option>
+            <option value="numbers">Numbers</option>
+            <option value="highest_lowercase_alphabet">Highest Lowercase Alphabet</option>
+        </select>
+
+        <h2>Response</h2>
+        <pre id="response"></pre>
+    </div>
+
+
+
+    <script>
+        async function submitData() {
+            const dataInput = document.getElementById('dataInput').value;
+
+   
+            try {
+                const payload = JSON.parse(dataInput);
+
+                const response = await fetch('/bfhl', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                document.getElementById('error').innerText = ''; // Clear error message
+
+                // Handle response rendering based on selected options
+                renderResponse(result);
+            } catch (e) {
+                document.getElementById('error').innerText = 'Invalid JSON format!';
+                document.getElementById('response').innerText = ''; // Clear response
+            }
+        }
+
+        function renderResponse(result) {
+            const selectedOption = document.getElementById('responseOptions').value;
+            const responseOutput = {};
+
+            if (selectedOption) {
+                responseOutput[selectedOption] = result[selectedOption];
+            }
+
+            document.getElementById('response').innerText = JSON.stringify(responseOutput, null, 2);
+        }
+    </script>
+</body>
+</html>
